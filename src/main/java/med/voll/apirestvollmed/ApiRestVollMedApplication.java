@@ -1,13 +1,13 @@
-package med.voll.api;
+package med.voll.apirestvollmed;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class ApiApplication {
+public class ApiRestVollMedApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(ApiApplication.class, args);
+		SpringApplication.run(ApiRestVollMedApplication.class, args);
 	}
 
 }
