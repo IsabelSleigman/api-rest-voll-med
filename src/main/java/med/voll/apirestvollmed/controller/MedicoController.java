@@ -1,5 +1,6 @@
 package med.voll.apirestvollmed.controller;
 
+import jakarta.validation.Valid;
 import med.voll.apirestvollmed.medico.DadosCadastroMedico;
 import med.voll.apirestvollmed.medico.Medico;
 import med.voll.apirestvollmed.medico.MedicoRepository;
@@ -19,7 +20,7 @@ public class MedicoController {
 
     @PostMapping
     @Transactional
-    public String cadastrar(@RequestBody DadosCadastroMedico dados){
+    public String cadastrar(@RequestBody @Valid DadosCadastroMedico dados){
         repository.save(new Medico(dados));
         return "Cadastrado com sucesso!";
     }
