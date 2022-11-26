@@ -17,10 +17,6 @@ public class MedicoController {
     @Autowired
     private MedicoRepository repository;
 
-    public MedicoController(MedicoRepository repository) {
-        this.repository = repository;
-    }
-
     @GetMapping
     public Page<DadosListagemMedico> listar(@PageableDefault(size = 10, sort = {"nome"}) Pageable paginacao){
         return repository.findAllByAtivoTrue(paginacao).map(DadosListagemMedico::new);
