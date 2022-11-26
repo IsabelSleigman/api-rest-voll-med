@@ -9,7 +9,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("medicos")
@@ -18,6 +18,14 @@ public class MedicoController {
     @Autowired
     private MedicoRepository repository;
 
+    @GetMapping
+    public Page<DadosListagemMedico> listar(@PageableDefault(size = 10, sort = {"nome"}) Pageable paginacao){
+        return repository.findAllByAtivoTrue(paginacao).map(DadosListagemMedico::new);
+    }
+    @GetMapping("/{id}")
+    public DadosMedico buscaPorId(@PathVariable Long id){
+        return repository.findMedicoById(id);
+    }
     @PostMapping
     @Transactional
     public String cadastrar(@RequestBody @Valid DadosCadastroMedico dados){
@@ -25,17 +33,20 @@ public class MedicoController {
         return "Cadastrado com sucesso!";
     }
 
-    @GetMapping
-    public Page<DadosListagemMedico> listar(@PageableDefault(size = 10, sort = {"nome"}) Pageable paginacao){
-        return repository.findAll(paginacao).map(DadosListagemMedico::new);
+    @PutMapping("/{id}")
+    @Transactional
+    public String atualizar(@PathVariable Long id, @RequestBody @Valid DadosAtualizacaoMedico dados){
+
+        var medico = repository.getReferenceById(id);
+        medico.atualizarInformacoes(dados);
+        return "Atualizado com sucesso!";
+
     }
 
-    @PutMapping
+    @DeleteMapping("/{id}")
     @Transactional
-    public void atualizar(@RequestBody @Valid DadosAtualizacaoMedico dados){
-
-        var medico = repository.getReferenceById(dados.id());
-        medico.atualizarInformacoes(dados);
-
+    public void excluir(@PathVariable Long id){
+        var medico = repository.getReferenceById(id);
+        medico.desativar();
     }
 }
